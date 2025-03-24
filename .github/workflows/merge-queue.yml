@@ -1,7 +1,5 @@
 name: Merge queue
 run-name: Merge queue
-permissons: write-all
-
 on:
   issue_comment:
     types: [created, edited]
@@ -11,6 +9,11 @@ jobs:
     name: Check mergeability
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      checks: read
 
     steps:
       - name: Acknowledge
@@ -61,7 +64,19 @@ jobs:
               core.setFailed();
             }
 
-  # enqueue_branch:
-  #   name: Enqueue branch for merging
-  #   runs-on: ubuntu-latest
-  #   permissions:
+  enqueue_branch:
+    name: Enqueue branch for merging
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Confirm
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'I hear you and I’m making space for you'
+            });
