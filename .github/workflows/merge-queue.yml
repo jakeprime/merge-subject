@@ -1,0 +1,62 @@
+name: Merge queue
+run-name: Merge queue
+on:
+  issue_comment:
+    types: [created, edited]
+    branches-ignore:
+      - master
+      - main
+
+jobs:
+  check_mergeability:
+    name: Check mergeability
+    if: github.event.issue.pull_request && github.event.comment.body == '/merge'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Acknowledge
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ github.event.comment.id }},
+              content: 'eyes'
+            });
+
+      - name: Check Mergeability
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pullRequest = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            const checks = await github.rest.checks.listForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: pullRequest.data.head.ref
+            });
+
+            core.info(`checks: ${JSON.stringify(checks.data)}`);
+            core.info(`pullRequest: ${JSON.stringify(pullRequest.data)}`);
+
+            if (!pullRequest.data.rebaseable) {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: 'Github does not think this branch is rebaseable, please rebase manually and try again.'
+              });
+              core.setFailed();
+            } else if (checks.data.check_runs.find(run => !['success', 'skipped'].includes(run.conclusion)) ||
+                       !pullRequest.data.mergeable) {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: 'PR is not mergeable, make sure all status checks are passing.'
+              });
+              core.setFailed();
+            }
