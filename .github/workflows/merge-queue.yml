@@ -1,5 +1,7 @@
 name: Merge queue
 run-name: Merge queue
+permissons: write-all
+
 on:
   issue_comment:
     types: [created, edited]
@@ -9,11 +11,6 @@ jobs:
     name: Check mergeability
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      checks: read
 
     steps:
       - name: Acknowledge
@@ -63,3 +60,8 @@ jobs:
               });
               core.setFailed();
             }
+
+  # enqueue_branch:
+  #   name: Enqueue branch for merging
+  #   runs-on: ubuntu-latest
+  #   permissions:
