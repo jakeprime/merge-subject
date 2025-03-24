@@ -3,15 +3,18 @@ run-name: Merge queue
 on:
   issue_comment:
     types: [created, edited]
-    branches-ignore:
-      - master
-      - main
 
 jobs:
   check_mergeability:
     name: Check mergeability
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      checks: read
+
     steps:
       - name: Acknowledge
         uses: actions/github-script@v6
