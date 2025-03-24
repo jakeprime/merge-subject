@@ -70,6 +70,29 @@ jobs:
     permissions: write-all
 
     steps:
+      - name: Branch from latest
+        id: branch_from_latest
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: branches } = await github.rest.repos.listBranches({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+
+            const branchPrefix = "merge-queue-branch-";
+            const latestMergeNumber = branches
+              .slice(0, 50)
+              .map(x => x.name)
+              .filter(x => x.indexOf(branchPrefix) === 0)
+              .map(x => parseInt(branchPrefix.length))
+              .sort()
+              .reverse()
+              [0];
+            const branchName = `branchPrefix${latestMergeNumber || 1}`;
+            core.setOutput("branchName", branchName);
+
       - name: Confirm
         uses: actions/github-script@v6
         with:
@@ -78,5 +101,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'I hear you and I’m making space for you'
+              body: `Creating branch: ${{ steps.branch_from_latest.outputs.branchName }}`
             });
