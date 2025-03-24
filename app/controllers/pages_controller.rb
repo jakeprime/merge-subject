@@ -1,5 +1,3 @@
 class PagesController < ApplicationController
-  def index
-    head :ok
-  end
+  def index; end
 end
