@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Branch from latest
         id: branch_from_latest
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const { data: branches } = await github.rest.repos.listBranches({
@@ -94,7 +94,7 @@ jobs:
             core.setOutput("branchName", branchName);
 
       - name: Confirm
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             await github.rest.issues.createComment({
