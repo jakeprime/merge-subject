@@ -70,36 +70,53 @@ jobs:
     permissions: write-all
 
     steps:
-      - name: Branch from latest
-        id: branch_from_latest
+      - name: Ensure merge state branch exists
+        id: ensure_merge_state_branch
         uses: actions/github-script@v7
         with:
           script: |
-            const { data: branches } = await github.rest.repos.listBranches({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100
-            });
+            try {
+              await github.rest.repos.getBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                branch: "merge-queue-state",
+              });
+            } catch (error) {
+              if (error.jtatus === 404) {
+                core.info("merge-queue-state branch does not exist");
+                core.setFailed();
+              }
+            }
 
-            const branchPrefix = "merge-queue-branch-";
-            const latestMergeNumber = branches
-              .slice(0, 50)
-              .map(x => x.name)
-              .filter(x => x.indexOf(branchPrefix) === 0)
-              .map(x => parseInt(branchPrefix.length))
-              .sort()
-              .reverse()
-              [0];
-            const branchName = `branchPrefix${latestMergeNumber || 1}`;
-            core.setOutput("branchName", branchName);
-
-      - name: Confirm
-        uses: actions/github-script@v7
+      - name: Checkout merge-queue-state branch
+        uses: actions/checkout@v4
         with:
-          script: |
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `Creating branch: ${{ steps.branch_from_latest.outputs.branchName }}`
-            });
+          ref: merge-queue-state
+
+      - name: Get latest merge queue counter
+        id: get_queue_counter
+        run: |
+          # get the latest current merge branch counter
+          set -euo pipefail
+
+          # git fetch origin merge-queue-state
+          git checkout origin/merge-queue-state -b merge-queue-state-working
+
+          currentBranchCounter=$(jq '.branchCounter' state.json)
+          next=$((currentBranchCounter + 1))
+
+          echo "yes"
+          echo "branchCounter=$(next)"
+          echo "no"
+          echo "branchCounter=$(next)" >> "$GITHUB_OUTPUT"
+
+      # - name: Write new branch counter
+      #   id: write_branch_counter
+      #   run: |
+      #     set -euo pipefail
+
+      #     jq ".currentBranchCounter = ${{steps.get_queue_counter.outputs.branchCounter}}" state.json > state.json
+
+      #     git add state.json
+      #     git commit -m "Incrementing merge queue counter"
+      #     git push origin HEAD:merge-queue-state
