@@ -70,36 +70,67 @@ jobs:
     permissions: write-all
 
     steps:
-      - name: Branch from latest
-        id: branch_from_latest
+      - name: Ensure merge-state-branch exists
+        id: ensure_merge_state_branch
         uses: actions/github-script@v7
         with:
           script: |
-            const { data: branches } = await github.rest.repos.listBranches({
+            const result = await github.rest.repos.getBranch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              per_page: 100
+              branch: "merge-queue-status",
             });
+            core.info("get branch merge-queue-status");
+            core.info(`result: "${result}"`);
+      # - name: Get branch name
+      #   id: get_branch_name
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       const { data: branches } = await github.rest.repos.listBranches({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         per_page: 100
+      #       });
 
-            const branchPrefix = "merge-queue-branch-";
-            const latestMergeNumber = branches
-              .slice(0, 50)
-              .map(x => x.name)
-              .filter(x => x.indexOf(branchPrefix) === 0)
-              .map(x => parseInt(branchPrefix.length))
-              .sort()
-              .reverse()
-              [0];
-            const branchName = `branchPrefix${latestMergeNumber || 1}`;
-            core.setOutput("branchName", branchName);
+      #       const branchPrefix = "merge-queue-branch-";
+      #       const latestMergeNumber = branches
+      #         .slice(0, 50)
+      #         .map(x => x.name)
+      #         .filter(x => x.indexOf(branchPrefix) === 0)
+      #         .map(x => parseInt(branchPrefix.length))
+      #         .sort()
+      #         .reverse()
+      #         [0];
+      #       const branchName = latestMergeNumber ? `${branchPrefix}${latestMergeNumber}`;
+      #       // not quite, this needs to be "main" if there aren't any existing merge branches
 
-      - name: Confirm
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `Creating branch: ${{ steps.branch_from_latest.outputs.branchName }}`
-            });
+      #       core.setOutput("branchName", branchName);
+
+      # - name: Check it out
+      #   uses: actions/checkout@v4
+      #   with:
+      #     ref: ${{ github.event.issue.pull_request.head.ref }}
+      #     fetch-depth: 0 # can't rebase without full history
+
+      # - name: Branch
+      #   run: |
+      #     git config user.name "OCP"
+      #     git config user.email "ocp@meetcleo.com"
+      #     git fetch origin ${{ steps.get_branch_name.outputs.branchName }}
+      #     git rebase origin/
+
+      #     // Should be creating a branch from this PR and then rebasing onto the latest merge branch
+
+      # - name: Setup Git
+      #   run:
+
+
+      #   with:
+      #     script: |
+      #       await github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: `Creating branch: ${{ steps.branch_from_latest.outputs.branchName }}`
+      #       });
