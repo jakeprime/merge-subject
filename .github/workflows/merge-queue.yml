@@ -184,9 +184,30 @@ jobs:
           git push origin HEAD:merge-queue-state
 
       - name: Wait for CircleCI to pass
-        uses: lewagon/wait-on-check-action@v1.3.4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          check-name: "ci/circleci: build"
-          ref: ${{ steps.create_merge_branch.outputs.sha }}
-          wait-interval: 10
+        run: |
+          REPO=${{ github.repository }}
+          SHA=${{ steps.create_merge_branch.outputs.sha }}
+
+          for i in {1..60}; do
+            result=$(gh api repos/$REPO/commits/$SHA/status)
+
+            state=$(echo "$result" | jq -r '.state')
+
+            echo "Status state: $state"
+
+            if [ "$state" = "success" ]; then
+              echo "✅ All statuses passed"
+              exit 0
+            elif [ "$state" = "failure" ]; then
+              echo "❌ One or more statuses failed"
+              exit 1
+            fi
+
+            echo "Waiting for statuses..."
+            sleep 10
+          done
+
+          echo "⏰ Timed out waiting for commit status"
+          exit 1
