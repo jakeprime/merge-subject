@@ -129,33 +129,22 @@ jobs:
           git config --global user.email "queue_bot@jakeprime.com"
           git config --global user.name "Q-bot"
 
-          echo "1"
 
           branch_counter=${{steps.get_queue_counter.outputs.branch_counter}}
-          echo "2"
 
           if git show-ref --verify --quiet refs/heads/merge-queue-$branch_counter; then
             base_branch=merge-queue-$branch_counter
           else
             base_branch=main
           fi
-          echo "3"
 
           branch_counter=$((branch_counter + 1))
 
-          echo "4"
-          # start with the branch for this PR
-          echo "git checkout ${{steps.get_pr_branch.outputs.branch}}"
-          git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
-          echo "5"
-          # create a merge branch from it
-          git checkout -b merge-branch-$branch_counter
-          echo "6"
-          # rebase it on top of whatever the latest merge candidate is
+          git checkout ${{steps.get_pr_branch.outputs.branch}}
           git fetch origin $base_branch && git rebase origin/$base_branch
-
-          echo "7"
-          echo "git push origin HEAD:merge-branch-$branch_counter"
+          git checkout $base_branch
+          git checkout -b merge-branch-$branch_counter
+          git merge ${{steps.get_pr_branch.outputs.branch}} --no-ff
           git push origin HEAD:merge-branch-$branch_counter
           # TODO: handle failure to rebase
 
