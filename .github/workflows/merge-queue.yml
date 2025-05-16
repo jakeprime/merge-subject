@@ -157,7 +157,7 @@ jobs:
           git push origin HEAD:merge-branch-$branch_counter
           # TODO: handle failure to rebase
 
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
 
       - name: Write new branch counter
