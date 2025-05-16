@@ -157,6 +157,8 @@ jobs:
           git push origin HEAD:merge-branch-$branch_counter
           # TODO: handle failure to rebase
 
+          echo "something something"
+          echo "$(gh api repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs --jq '.check_runs[].name')"
           echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
 
