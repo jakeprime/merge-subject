@@ -212,3 +212,8 @@ jobs:
 
           echo "⏰ Timed out waiting for commit status"
           exit 1
+
+      - name: Merge into main
+        id: merge_to_main
+        run: |
+          git push origin ${{ steps.create_merge_branch.outputs.sha }}:refs/heads/main --force
