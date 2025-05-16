@@ -183,7 +183,6 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: "ci/circleci: build"
+          check-name: "ci/circleci: build"
           ref: ${{ steps.create_merge_branch.outputs.sha }}
-          timeoutSeconds: 1200
-          intervalSeconds: 10
+          wait-interval: 10
