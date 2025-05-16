@@ -120,6 +120,8 @@ jobs:
 
       - name: Create merge branch
         id: create_merge_branch
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           # branch off the latest merge queue branch and add to it
           set -euo pipefail
