@@ -205,9 +205,4 @@ jobs:
       - name: Merge into main
         id: merge_to_main
         run: |
-          git fetch origin merge-branch-${{ steps.create_merge_branch.outputs.branch_counter }} && git checkout merge-branch-${{ steps.create_merge_branch.outputs.branch_counter }}
-          git push origin ${{ steps.get_pr_branch.outputs.branch }} --force-with-lease
-          # git push origin ${{ steps.create_merge_branch.outputs.sha }}:refs/heads/${{steps.get_pr_branch.outputs.branch}} --force
-          # git fetch origin main && git checkout main
-          git merge origin/${{steps.get_pr_branch.outputs.branch}}
-          git push
+          git push origin ${{ steps.create_merge_branch.outputs.sha }}:refs/heads/main --force
