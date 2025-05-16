@@ -157,6 +157,7 @@ jobs:
           git push origin HEAD:merge-branch-$branch_counter
           # TODO: handle failure to rebase
 
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
 
       - name: Write new branch counter
@@ -177,3 +178,12 @@ jobs:
           git add state.json
           git commit -m "Incrementing merge queue counter"
           git push origin HEAD:merge-queue-state
+
+      - name: Wait for CircleCI to pass
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: "ci/circleci: build"
+          ref: ${{ steps.create_merge_branch.outputs.sha }}
+          timeoutSeconds: 1200
+          intervalSeconds: 10
