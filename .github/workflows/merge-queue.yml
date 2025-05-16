@@ -184,8 +184,9 @@ jobs:
           git push origin HEAD:merge-queue-state
 
       - name: Wait for CircleCI to pass
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        id: wait_for_ci
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           REPO=${{ github.repository }}
           SHA=${{ steps.create_merge_branch.outputs.sha }}
