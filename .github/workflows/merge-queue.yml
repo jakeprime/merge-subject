@@ -227,6 +227,7 @@ jobs:
         run: |
           REPO=${{ github.repository }}
           SHA=${{ steps.create_merge_branch.outputs.sha }}
+          PR_NUMBER=${{ github.event.issue.pull_request.url }}
 
           echo "gh api -X PUT repos/$REPO/pulls/$PR_NUMBER/merge -f merge_method=rebase"
 
