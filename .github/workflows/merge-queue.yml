@@ -211,10 +211,10 @@ jobs:
       #     echo "⏰ Timed out waiting for commit status"
       #     exit 1
 
-      - name: Checkout merge-queue-x branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.get_queue_counter.outputs.merge_branch }}
+      # - name: Checkout merge-queue-x branch
+      #   uses: actions/checkout@v4
+      #   with:
+      #     ref: ${{ steps.get_queue_counter.outputs.merge_branch }}
 
       - name: Merge into main
         id: merge_to_main
