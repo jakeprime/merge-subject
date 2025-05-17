@@ -42,8 +42,8 @@ jobs:
               ref: pullRequest.data.head.ref
             });
 
-            core.info(`checks: ${JSON.stringify(checks.data)}`);
-            core.info(`pullRequest: ${JSON.stringify(pullRequest.data)}`);
+            # core.info(`checks: ${JSON.stringify(checks.data)}`);
+            # core.info(`pullRequest: ${JSON.stringify(pullRequest.data)}`);
 
             if (!pullRequest.data.rebaseable) {
               await github.rest.issues.createComment({
@@ -241,7 +241,7 @@ jobs:
           git fetch origin main && git checkout main
 
           echo "git merge ${{steps.get_pr_branch.outputs.branch}}"
-          git merge ${{steps.get_pr_branch.outputs.branch}}
+          git merge ${{steps.get_pr_branch.outputs.branch}} --no-ff
 
           echo "git push"
           git push
