@@ -230,10 +230,11 @@ jobs:
           PR_URL=${{ github.event.issue.pull_request.url }}
           PR_NUMBER=$(basename "$PR_URL")
 
-          git fetch origin main && git checkout origin/main
-          git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}
-          git merge origin/${{ steps.get_queue_counter.outputs.merge_branch }} --no-ff
-          git push
+          git fetch origin main && git checkout main
+          git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }} && git checkout ${{ steps.get_queue_counter.outputs.merge_branch }}
+          git switch main
+          git merge ${{ steps.get_queue_counter.outputs.merge_branch }} --no-ff
+          git push -u origin HEAD:main
 
           # echo "gh api -X PUT repos/$REPO/pulls/$PR_NUMBER/merge -f merge_method=merge"
 
