@@ -153,8 +153,10 @@ jobs:
           git fetch origin $base_branch && git rebase origin/$base_branch
           git checkout $base_branch
           git checkout -b merge-branch-$branch_counter
+          echo "Created branch merge-branch-$branch_counter"
           git merge ${{steps.get_pr_branch.outputs.branch}} --no-ff
-          git push origin HEAD:merge-branch-$branch_counter
+          # git push --set-upstream origin HEAD:merge-branch-$branch_counter
+          git push --set-upstream origin HEAD
           # TODO: handle failure to rebase
 
           echo "something something"
@@ -211,15 +213,17 @@ jobs:
       #     echo "⏰ Timed out waiting for commit status"
       #     exit 1
 
-      - name: Checkout merge-queue-x branch
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          # ref: ${{ steps.get_queue_counter.outputs.merge_branch }}
+      # - name: Checkout merge-queue-x branch
+      #   uses: actions/checkout@v4
+      #   with:
+      #     fetch-depth: 0
+      #     # ref: ${{ steps.get_queue_counter.outputs.merge_branch }}
 
       - name: Merge into main
         id: merge_to_main
         run: |
+          echo "git fetch"
+          git fetch
           echo "git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}"
           git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}
 
