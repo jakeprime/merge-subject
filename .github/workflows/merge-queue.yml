@@ -159,11 +159,16 @@ jobs:
           branch_counter=${{steps.get_queue_counter.outputs.branch_counter}}
           branch_name=${{ steps.get_queue_counter.outputs.branch_name }}
 
+          echo "branch_counter = $branch_counter"
+          echo "branch_name = $branch_name"
+
           if git show-ref --verify --quiet refs/heads/merge-branch-$branch_counter; then
             base_branch=merge-branch-$branch_counter
           else
             base_branch=main
           fi
+
+          echo "base_branch = $base_branch"
 
           branch_counter=$((branch_counter + 1))
 
