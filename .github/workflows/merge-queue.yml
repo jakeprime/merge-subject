@@ -225,6 +225,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          REPO=${{ github.repository }}
+          SHA=${{ steps.create_merge_branch.outputs.sha }}
+
+          echo "gh api -X PUT repos/$REPO/pulls/$PR_NUMBER/merge -f merge_method=rebase"
+
           gh api \
             -X PUT \
             repos/$REPO/pulls/$PR_NUMBER/merge \
