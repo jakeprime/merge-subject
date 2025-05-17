@@ -150,9 +150,12 @@ jobs:
 
           branch_counter=$((branch_counter + 1))
 
-          git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
           git fetch origin $base_branch && git rebase origin/$base_branch
-          git checkout $base_branch
+          git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
+          git rebase --rebase-merges $base_branch
+          git push --force --set-upstream origin HEAD:${{steps.get_pr_branch.outputs.branch}}
+
+          git switch $base_branch
           git checkout -b merge-branch-$branch_counter
           echo "Created branch merge-branch-$branch_counter"
           git merge ${{steps.get_pr_branch.outputs.branch}} --no-ff
