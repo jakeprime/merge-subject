@@ -151,7 +151,7 @@ jobs:
           branch_counter=$((branch_counter + 1))
 
           echo 1
-          git fetch origin $base_branch && git checkout origin/$base_branch
+          git fetch origin $base_branch && git checkout $base_branch
           echo 2
           git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
           echo 3
