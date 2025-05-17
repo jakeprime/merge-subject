@@ -123,8 +123,8 @@ jobs:
           # nextBranchCounter=$((branchCounter + 1))
           echo "branch_counter=$branch_counter"
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
-          echo "merge_branch=merge-queue-$((branch_counter + 1))"
-          echo "merge_branch=merge-queue-$((branch_counter + 1))" >> "$GITHUB_OUTPUT"
+          echo "merge_branch=merge-branch-$((branch_counter + 1))"
+          echo "merge_branch=merge-branch-$((branch_counter + 1))" >> "$GITHUB_OUTPUT"
           echo "5"
 
       - name: Create merge branch
@@ -140,9 +140,10 @@ jobs:
 
 
           branch_counter=${{steps.get_queue_counter.outputs.branch_counter}}
+          branch_name=${{ steps.get_queue_counter.outputs.branch_name }}
 
-          if git show-ref --verify --quiet refs/heads/merge-queue-$branch_counter; then
-            base_branch=merge-queue-$branch_counter
+          if git show-ref --verify --quiet refs/heads/merge-branch-$branch_counter; then
+            base_branch=merge-branch-$branch_counter
           else
             base_branch=main
           fi
@@ -213,7 +214,7 @@ jobs:
       #     echo "⏰ Timed out waiting for commit status"
       #     exit 1
 
-      # - name: Checkout merge-queue-x branch
+      # - name: Checkout merge-branch-x branch
       #   uses: actions/checkout@v4
       #   with:
       #     fetch-depth: 0
