@@ -163,7 +163,7 @@ jobs:
           echo "branch_name = $branch_name"
 
           git fetch
-          if git show-ref --verify --quiet origin refs/heads/merge-branch-$branch_counter; then
+          if git show-ref origin refs/heads/merge-branch-$branch_counter; then
             base_branch=merge-branch-$branch_counter
           else
             base_branch=main
