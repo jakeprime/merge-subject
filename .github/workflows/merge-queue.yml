@@ -113,6 +113,9 @@ jobs:
             exit 1
           fi
 
+          git config --global user.email "queue_bot@jakeprime.com"
+          git config --global user.name "Q-bot"
+
           echo "Locked by Q-bot" > lock
           git add lock
           git commit -m "Locking state"
