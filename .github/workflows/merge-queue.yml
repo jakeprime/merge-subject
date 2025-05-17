@@ -233,7 +233,7 @@ jobs:
           git fetch origin main && git checkout main
           git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }} && git checkout ${{ steps.get_queue_counter.outputs.merge_branch }}
           git switch main
-          git merge ${{ steps.get_queue_counter.outputs.merge_branch }} --no-ff
+          git merge ${{ steps.get_queue_counter.outputs.merge_branch }}
           git push -u origin HEAD:main
 
           # echo "gh api -X PUT repos/$REPO/pulls/$PR_NUMBER/merge -f merge_method=merge"
