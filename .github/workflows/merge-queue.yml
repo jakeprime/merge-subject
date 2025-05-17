@@ -231,8 +231,8 @@ jobs:
           PR_NUMBER=$(basename "$PR_URL")
 
           git fetch origin main && git checkout origin/main
-          git fetch origin ${{ steps.get_queue_count.outputs.merge_branch }}
-          git merge origin/${{ steps.get_queue_count.outputs.merge_branch }} --no-ff
+          git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}
+          git merge origin/${{ steps.get_queue_counter.outputs.merge_branch }} --no-ff
           git push
 
           # echo "gh api -X PUT repos/$REPO/pulls/$PR_NUMBER/merge -f merge_method=merge"
