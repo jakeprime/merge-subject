@@ -181,35 +181,35 @@ jobs:
           git commit -m "Incrementing merge queue counter"
           git push origin HEAD:merge-queue-state
 
-      - name: Wait for CircleCI to pass
-        id: wait_for_ci
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          REPO=${{ github.repository }}
-          SHA=${{ steps.create_merge_branch.outputs.sha }}
+      # - name: Wait for CircleCI to pass
+      #   id: wait_for_ci
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     REPO=${{ github.repository }}
+      #     SHA=${{ steps.create_merge_branch.outputs.sha }}
 
-          for i in {1..60}; do
-            result=$(gh api repos/$REPO/commits/$SHA/status)
+      #     for i in {1..60}; do
+      #       result=$(gh api repos/$REPO/commits/$SHA/status)
 
-            state=$(echo "$result" | jq -r '.state')
+      #       state=$(echo "$result" | jq -r '.state')
 
-            echo "Status state: $state"
+      #       echo "Status state: $state"
 
-            if [ "$state" = "success" ]; then
-              echo "✅ All statuses passed"
-              exit 0
-            elif [ "$state" = "failure" ]; then
-              echo "❌ One or more statuses failed"
-              exit 1
-            fi
+      #       if [ "$state" = "success" ]; then
+      #         echo "✅ All statuses passed"
+      #         exit 0
+      #       elif [ "$state" = "failure" ]; then
+      #         echo "❌ One or more statuses failed"
+      #         exit 1
+      #       fi
 
-            echo "Waiting for statuses..."
-            sleep 10
-          done
+      #       echo "Waiting for statuses..."
+      #       sleep 10
+      #     done
 
-          echo "⏰ Timed out waiting for commit status"
-          exit 1
+      #     echo "⏰ Timed out waiting for commit status"
+      #     exit 1
 
       - name: Checkout merge-queue-x branch
         uses: actions/checkout@v4
@@ -219,10 +219,23 @@ jobs:
       - name: Merge into main
         id: merge_to_main
         run: |
+          echo "git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}"
           git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}
+
+          echo "git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}"
           git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
+
+          echo "git reset --hard origin/${{steps.get_pr_branch.outputs.branch}}"
           git reset --hard origin/${{steps.get_pr_branch.outputs.branch}}
+
+          echo "git push --force-with-lease"
           git push --force-with-lease
+
+          echo "git fetch origin main && git checkout main"
           git fetch origin main && git checkout main
+
+          echo "git merge ${{steps.get_pr_branch.outputs.branch}}"
           git merge ${{steps.get_pr_branch.outputs.branch}}
+
+          echo "git push"
           git push
