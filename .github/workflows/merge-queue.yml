@@ -214,7 +214,7 @@ jobs:
       - name: Checkout merge-queue-x branch
         uses: actions/checkout@v4
         with:
-          ref: merge-queue-{{ steps.get_queue_counter.outputs.merge_branch }}
+          ref: merge-queue-${{ steps.get_queue_counter.outputs.merge_branch }}
 
       - name: Merge into main
         id: merge_to_main
