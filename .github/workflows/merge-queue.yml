@@ -222,26 +222,34 @@ jobs:
 
       - name: Merge into main
         id: merge_to_main
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "git fetch"
-          git fetch
-          echo "git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}"
-          git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}
+          gh api \
+            -X PUT \
+            repos/$REPO/pulls/$PR_NUMBER/merge \
+            -f merge_method=rebase
 
-          echo "git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}"
-          git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
+          # echo "git fetch"
+          # git fetch
 
-          echo "git reset --hard origin/${{steps.get_pr_branch.outputs.branch}}"
-          git reset --hard origin/${{steps.get_pr_branch.outputs.branch}}
+          # echo "git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}"
+          # git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}
 
-          echo "git push --force-with-lease"
-          git push --force-with-lease
+          # echo "git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}"
+          # git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
 
-          echo "git fetch origin main && git checkout main"
-          git fetch origin main && git checkout main
+          # echo "git reset --hard origin/${{steps.get_pr_branch.outputs.branch}}"
+          # git reset --hard origin/${{steps.get_pr_branch.outputs.branch}}
 
-          echo "git merge ${{steps.get_pr_branch.outputs.branch}}"
-          git merge ${{steps.get_pr_branch.outputs.branch}} --no-ff
+          # echo "git push --force-with-lease"
+          # git push --force-with-lease
 
-          echo "git push"
-          git push
+          # echo "git fetch origin main && git checkout main"
+          # git fetch origin main && git checkout main
+
+          # echo "git merge ${{steps.get_pr_branch.outputs.branch}}"
+          # git merge ${{steps.get_pr_branch.outputs.branch}} --no-ff
+
+          # echo "git push"
+          # git push
