@@ -104,6 +104,20 @@ jobs:
         with:
           ref: merge-queue-state
 
+      - name: Get lock
+        id: get_lock
+        run: |
+          git fetch origin merge-queue-state && git checkout merge-queue-state
+          if git ls-tree --name-only merge-queue-state lock | grep -q 'lock'; then
+            echo "State is locked"
+            exit 1
+          fi
+
+          echo "Locked by Q-bot" > lock
+          git add lock
+          git commit -m "Locking state"
+          git push origin HEAD:merge-queue-state
+
       - name: Get latest merge queue counter
         id: get_queue_counter
         run: |
@@ -177,7 +191,7 @@ jobs:
           echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
 
-      - name: Write new branch counter
+      - name: Write new branch counter and unlock
         id: write_branch_counter
         run: |
           set -euo pipefail
@@ -192,8 +206,9 @@ jobs:
           git config --global user.email "queue_bot@jakeprime.com"
           git config --global user.name "Q-bot"
 
-          git add state.json
-          git commit -m "Incrementing merge queue counter"
+          rm lock
+          git add .
+          git commit -m "Updating state and releasing lock"
           git push origin HEAD:merge-queue-state
 
       # - name: Wait for CircleCI to pass
