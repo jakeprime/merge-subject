@@ -99,10 +99,10 @@ jobs:
               }
             }
 
-      - name: Checkout merge-queue-state branch
-        uses: actions/checkout@v4
-        with:
-          ref: merge-queue-state
+      # - name: Checkout merge-queue-state branch
+      #   uses: actions/checkout@v4
+      #   with:
+      #     ref: merge-queue-state
 
       - name: Get latest merge queue counter
         id: get_queue_counter
@@ -117,6 +117,7 @@ jobs:
           # nextBranchCounter=$((branchCounter + 1))
           echo "branch_counter=$branch_counter"
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
+          echo "merge_branch=merge-queue-$branch_counter" >> "$GITHUB_OUTPUT"
 
       - name: Create merge branch
         id: create_merge_branch
@@ -205,7 +206,10 @@ jobs:
       - name: Merge into main
         id: merge_to_main
         run: |
-          git push origin ${{ steps.create_merge_branch.outputs.sha }}:refs/heads/${{steps.get_pr_branch.outputs.branch}} --force
+          git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }}
+          git fetch origin ${{steps.get_pr_branch.outputs.branch}} && git checkout ${{steps.get_pr_branch.outputs.branch}}
+          git reset --hard origin/${{steps.get_pr_branch.outputs.branch}}
+          git push --force-with-lease
           git fetch origin main && git checkout main
-          git merge
-          git fetch origin
+          git merge ${{steps.get_pr_branch.outputs.branch}}
+          git push
