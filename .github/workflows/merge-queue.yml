@@ -123,8 +123,8 @@ jobs:
           # nextBranchCounter=$((branchCounter + 1))
           echo "branch_counter=$branch_counter"
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
-          echo "merge_branch=merge-queue-$($branch_counter + 1)"
-          echo "merge_branch=merge-queue-$($branch_counter + 1)" >> "$GITHUB_OUTPUT"
+          echo "merge_branch=merge-queue-$((branch_counter + 1))"
+          echo "merge_branch=merge-queue-$((branch_counter + 1))" >> "$GITHUB_OUTPUT"
           echo "5"
 
       - name: Create merge branch
