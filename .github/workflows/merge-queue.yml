@@ -99,10 +99,10 @@ jobs:
               }
             }
 
-      # - name: Checkout merge-queue-state branch
-      #   uses: actions/checkout@v4
-      #   with:
-      #     ref: merge-queue-state
+      - name: Checkout merge-queue-state branch
+        uses: actions/checkout@v4
+        with:
+          ref: merge-queue-state
 
       - name: Get latest merge queue counter
         id: get_queue_counter
