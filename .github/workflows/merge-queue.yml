@@ -232,21 +232,21 @@ jobs:
       #     fetch-depth: 0
       #     # ref: ${{ steps.get_queue_counter.outputs.merge_branch }}
 
-      - name: Merge into main
-        id: merge_to_main
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          REPO=${{ github.repository }}
-          SHA=${{ steps.create_merge_branch.outputs.sha }}
-          PR_URL=${{ github.event.issue.pull_request.url }}
-          PR_NUMBER=$(basename "$PR_URL")
+      # - name: Merge into main
+      #   id: merge_to_main
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     REPO=${{ github.repository }}
+      #     SHA=${{ steps.create_merge_branch.outputs.sha }}
+      #     PR_URL=${{ github.event.issue.pull_request.url }}
+      #     PR_NUMBER=$(basename "$PR_URL")
 
-          git fetch origin main && git checkout main
-          git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }} && git checkout ${{ steps.get_queue_counter.outputs.merge_branch }}
-          git switch main
-          git merge ${{ steps.get_queue_counter.outputs.merge_branch }}
-          git push -u origin HEAD:main
+      #     git fetch origin main && git checkout main
+      #     git fetch origin ${{ steps.get_queue_counter.outputs.merge_branch }} && git checkout ${{ steps.get_queue_counter.outputs.merge_branch }}
+      #     git switch main
+      #     git merge ${{ steps.get_queue_counter.outputs.merge_branch }}
+      #     git push -u origin HEAD:main
 
           # echo "gh api -X PUT repos/$REPO/pulls/$PR_NUMBER/merge -f merge_method=merge"
 
