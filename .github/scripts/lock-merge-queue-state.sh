@@ -14,10 +14,13 @@ for i in {1..10}; do
     git commit -m "Locking merge queue state"
 
     # this will fail if another runner has pushed a lock in the meantime
+    echo "Attempting to push the lock"
     if git push; then
+      echo "Succeeded"
       git checkout main
       exit 0
     else
+      echo "Failed to push, resetting"
       git reset --hard HEAD~1
     fi
   fi
