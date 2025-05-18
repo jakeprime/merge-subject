@@ -43,6 +43,8 @@ jobs:
 
           git checkout merge-queue-state
 
+          cat state.json
+
           branch_counter=$(jq '.branchCounter' state.json)
           branch_counter=$(($branch_counter + 1))
 
@@ -143,12 +145,15 @@ jobs:
 
           git checkout merge-queue-state
           git pull
+          cat state.json
           jq \
             --arg name "$merge_branch" \
             '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
           git add state.json
           git commit -m '$merge_branch has been successfully merged'
           git push
+
+          cat state.json
 
           git checkout main
 

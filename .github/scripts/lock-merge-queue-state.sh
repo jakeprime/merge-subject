@@ -19,6 +19,7 @@ for i in {1..10}; do
 
     # this will fail if another runner has pushed a lock in the meantime
     if git push; then
+      cat state.json
       git checkout main
       exit 0
     else
