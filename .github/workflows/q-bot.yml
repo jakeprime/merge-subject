@@ -127,15 +127,16 @@ jobs:
           merge_branch=${{ steps.load_state.outputs.merge_branch }}
           pr_branch=${{ steps.load_state.outputs.pr_branch }}
 
-          git checkout $pr_branch
+          # git checkout $pr_branch
+          # git reset --hard $merge_branch
+          # git push --force-with-lease
+          git checkout main
+          git pull
           git reset --hard $merge_branch
           git push --force-with-lease
-          git fetch origin main && git checkout main
-          git merge $pr_branch
-          git push
 
           git push --delete origin $merge_branch
-          git push --delete origin $pr_branch
+          # git push --delete origin $pr_branch
 
           git checkout merge-queue-state
           git pull
