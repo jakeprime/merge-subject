@@ -49,10 +49,9 @@ jobs:
           pr_url="${{ github.event.issue.pull_request.url }}"
           pr_branch=$(gh api "$pr_url" --jq .head.ref)
 
-          if jq '(.mergeBranches | length) == 0' state.json; then
+          base_branch=$(jq -r '.mergeBranches | max_by(.count) | .name' state.json)
+          if [[ "$base_branch" == "null" ]]; then
             base_branch=main
-          else
-            base_branch=$(jq -r '.mergeBranches | max_by(.count) | .name' state.json)
           fi
 
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
