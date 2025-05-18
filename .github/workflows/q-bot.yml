@@ -9,30 +9,72 @@ jobs:
     name: Merge to main
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: write
-      checks: read
+    permissions: write-all
 
-      steps:
-        - name: Acknowledge
-          uses: actions/github-script@v7
-          with:
-            script: |
-              await github.rest.reactions.createForIssueComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: ${{ github.event.comment.id }},
-                content: 'eyes'
-              });
+    steps:
+      - name: Acknowledge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ github.event.comment.id }},
+              content: 'eyes'
+            });
 
-        - name: Lock merge queue state
-          uses: ./.github/actions/lock-merge-queue-state
+      - name: Set Git user
+        run: |
+          git config --global user.email "queue_bot@jakeprime.com"
+          git config --global user.name "Q-bot"
 
-        # - name: Create merge branch with lock
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-        # - name: Unlock merge queue state
+      - name: Lock merge queue state
+        run: .github/scripts/lock-merge-queue-state.sh
+
+      - name: Load merge state
+        id: load_state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          git checkout merge-queue-state
+
+          branch_counter=$(jq '.branchCounter' state.json)
+          branch_counter=$(($branch_counter + 1))
+
+          pr_url="${{ github.event.issue.pull_request.url }}"
+          pr_branch_name=$(gh api "$pr_url" --jq .head.ref)
+
+          if jq '(.mergeBranches | length) == 0' state.json; then
+            base_branch=main
+          else
+            base_branch=$(jq -r '.mergeBranches | max_by(.count) | .name' state.json)
+          fi
+
+          echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
+          echo "merge_branch_name=merge-branch-$branch_counter" >> "$GITHUB_OUTPUT"
+          echo "pr_branch_name=$pr_branch_name" >> "$GITHUB_OUTPUT"
+          echo "base_branch=$base_branch" >> "$GITHUB_OUTPUT"
+
+          cat "$GITHUB_OUTPUT"
+
+          git checkout main
+
+      # - name: Create merge branch
+      #   id: create_merge_branch
+      #   run: |
+      #     set -euo pipefail
+
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Unlock merge queue state
+        run: .github/scripts/unlock-merge-queue-state.sh
 
         # - name: Wait for successful CI
 
