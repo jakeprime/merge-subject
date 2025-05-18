@@ -47,7 +47,7 @@ jobs:
           branch_counter=$(($branch_counter + 1))
 
           pr_url="${{ github.event.issue.pull_request.url }}"
-          pr_branch_name=$(gh api "$pr_url" --jq .head.ref)
+          pr_branch=$(gh api "$pr_url" --jq .head.ref)
 
           if jq '(.mergeBranches | length) == 0' state.json; then
             base_branch=main
@@ -56,30 +56,74 @@ jobs:
           fi
 
           echo "branch_counter=$branch_counter" >> "$GITHUB_OUTPUT"
-          echo "merge_branch_name=merge-branch-$branch_counter" >> "$GITHUB_OUTPUT"
-          echo "pr_branch_name=$pr_branch_name" >> "$GITHUB_OUTPUT"
+          echo "merge_branch=merge-branch-$branch_counter" >> "$GITHUB_OUTPUT"
+          echo "pr_branch=$pr_branch" >> "$GITHUB_OUTPUT"
           echo "base_branch=$base_branch" >> "$GITHUB_OUTPUT"
 
           cat "$GITHUB_OUTPUT"
 
           git checkout main
 
-      # - name: Create merge branch
-      #   id: create_merge_branch
-      #   run: |
-      #     set -euo pipefail
+      - name: Create merge branch
+        id: create_merge_branch
+        run: |
+          set -euo pipefail
 
+          branch_counter=${{ steps.load_state.outputs.branch_counter }}
+          base_branch=${{ steps.load_state.outputs.base_branch }}
+          merge_branch=${{ steps.load_state.outputs.merge_branch }}
+          pr_branch=${{ steps.load_state.outputs.pr_branch }}
 
-      - name: Checkout repo
-        uses: actions/checkout@v4
+          git fetch origin $base_branch $pr_branch
+
+          git checkout $pr_branch
+          git rebase --rebase-merges origin/$base_branch
+
+          git checkout $base_branch
+          git checkout -b $merge_branch
+          git merge --no-ff $pr_branch
+          git push --set-upstream origin HEAD:$merge_branch
+
+          sha=$(git rev-parse --short HEAD)
+
+          git checkout merge-queue-state
+
+          state="$(cat state.json)"
+
+          state="$(echo $state | jq \
+            --arg name "$merge_branch" \
+            --arg sha "$sha" \
+            --arg status "running" \
+            --argjson count $branch_counter \
+            '.mergeBranches += [{
+              name: $name,
+              sha: $sha,
+              status: $status,
+              count: $count
+            }]')"
+
+          state="$(echo $state | jq --argjson count $branch_counter '.branchCounter = $count')"
+
+          if [[ -n "$state" ]]; then
+            echo "$state" > state.json
+            git add state.json
+            git commit -m 'Updating merge state'
+            git push
+          fi
+
+          git checkout main
 
       - name: Unlock merge queue state
         run: .github/scripts/unlock-merge-queue-state.sh
 
         # - name: Wait for successful CI
 
-        # - name: Lock merge queue state
+      - name: Lock merge queue state
+        run: .github/scripts/lock-merge-queue-state.sh
 
-        # - name: Merge to main with lock
+        # name: Merge to main
+        # run: |
 
-        # - name: Unlock merge queue state
+
+      - name: Unlock merge queue state
+        run: .github/scripts/unlock-merge-queue-state.sh

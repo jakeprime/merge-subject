@@ -14,6 +14,7 @@ for i in {1..10}; do
 
     # this will fail if another runner has pushed a lock in the meantime
     if git push; then
+      git checkout main
       exit 0
     else
       git reset --hard HEAD~1
