@@ -141,7 +141,7 @@ jobs:
           git pull
           jq \
             --arg name "$merge_branch" \
-            '.mergeBranches |= map(select(.name != "$merge_branch"))' state.json > tmp && mv tmp state.json
+            '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
           git add state.json
           git commit -m '$merge_branch has been successfully merged'
 
