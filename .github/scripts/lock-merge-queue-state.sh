@@ -8,6 +8,7 @@ for i in {1..10}; do
     echo "State is locked"
   else
     git checkout merge-queue-state
+    git pull
     echo "$GITHUB_RUN_ID" > lock
     git add lock
     git commit -m "Locking merge queue state"
