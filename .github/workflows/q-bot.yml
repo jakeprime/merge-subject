@@ -144,6 +144,9 @@ jobs:
             '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
           git add state.json
           git commit -m '$merge_branch has been successfully merged'
+          git push
+
+          git checkout main
 
       - name: Unlock merge queue state
         run: .github/scripts/unlock-merge-queue-state.sh
