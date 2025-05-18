@@ -1,0 +1,43 @@
+name: Q-bot
+run-name: Q-bot
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  merge:
+    name: Merge to main
+    if: github.event.issue.pull_request && github.event.comment.body == '/merge'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      checks: read
+
+      steps:
+        - name: Acknowledge
+          uses: actions/github-script@v7
+          with:
+            script: |
+              await github.rest.reactions.createForIssueComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: ${{ github.event.comment.id }},
+                content: 'eyes'
+              });
+
+        - name: Lock merge queue state
+          uses: ./.github/actions/lock-merge-queue-state
+
+        # - name: Create merge branch with lock
+
+        # - name: Unlock merge queue state
+
+        # - name: Wait for successful CI
+
+        # - name: Lock merge queue state
+
+        # - name: Merge to main with lock
+
+        # - name: Unlock merge queue state

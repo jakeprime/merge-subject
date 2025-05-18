@@ -1,8 +1,8 @@
 name: Merge queue
 run-name: Merge queue
 on:
-  issue_comment:
-    types: [created, edited]
+  # issue_comment:
+  #   types: [created, edited]
 
 jobs:
   check_mergeability:
