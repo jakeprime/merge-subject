@@ -143,15 +143,15 @@ jobs:
           # git push --delete origin $merge_branch
           # git push --delete origin $pr_branch
 
-          git checkout merge-queue-state
-          git pull
-          cat state.json
-          jq \
-            --arg name "$merge_branch" \
-            '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
-          git add state.json
-          git commit -m '$merge_branch has been successfully merged'
-          git push
+          # git checkout merge-queue-state
+          # git pull
+          # cat state.json
+          # jq \
+          #   --arg name "$merge_branch" \
+          #   '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
+          # git add state.json
+          # git commit -m '$merge_branch has been successfully merged'
+          # git push
 
           cat state.json
 
