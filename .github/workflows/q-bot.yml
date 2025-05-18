@@ -120,7 +120,7 @@ jobs:
       - name: Lock merge queue state
         run: .github/scripts/lock-merge-queue-state.sh
 
-        name: Merge to main
+      - name: Merge to main
         run: |
           set -euo pipefail
 
