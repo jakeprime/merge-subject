@@ -85,6 +85,8 @@ jobs:
 
           sha=$(git rev-parse --short HEAD)
 
+          git log --oneline --decorate --graph
+
           git checkout merge-queue-state
 
           state="$(cat state.json)"
@@ -120,35 +122,35 @@ jobs:
       - name: Lock merge queue state
         run: .github/scripts/lock-merge-queue-state.sh
 
-      - name: Merge to main
-        run: |
-          set -euo pipefail
+      # - name: Merge to main
+      #   run: |
+      #     set -euo pipefail
 
-          base_branch=${{ steps.load_state.outputs.base_branch }}
-          merge_branch=${{ steps.load_state.outputs.merge_branch }}
-          pr_branch=${{ steps.load_state.outputs.pr_branch }}
+      #     base_branch=${{ steps.load_state.outputs.base_branch }}
+      #     merge_branch=${{ steps.load_state.outputs.merge_branch }}
+      #     pr_branch=${{ steps.load_state.outputs.pr_branch }}
 
-          git checkout $pr_branch
-          git rebase --rebase-merges $base_branch
-          git push --force-with-lease
-          git checkout main
-          git pull
-          git reset --hard $merge_branch
-          git push --force-with-lease
+      #     git checkout $pr_branch
+      #     git rebase --rebase-merges $base_branch
+      #     git push --force-with-lease
+      #     git checkout main
+      #     git pull
+      #     git reset --hard $merge_branch
+      #     git push --force-with-lease
 
-          git push --delete origin $merge_branch
-          # git push --delete origin $pr_branch
+      #     git push --delete origin $merge_branch
+      #     # git push --delete origin $pr_branch
 
-          git checkout merge-queue-state
-          git pull
-          jq \
-            --arg name "$merge_branch" \
-            '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
-          git add state.json
-          git commit -m '$merge_branch has been successfully merged'
-          git push
+      #     git checkout merge-queue-state
+      #     git pull
+      #     jq \
+      #       --arg name "$merge_branch" \
+      #       '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
+      #     git add state.json
+      #     git commit -m '$merge_branch has been successfully merged'
+      #     git push
 
-          git checkout main
+      #     git checkout main
 
       - name: Unlock merge queue state
         run: .github/scripts/unlock-merge-queue-state.sh
