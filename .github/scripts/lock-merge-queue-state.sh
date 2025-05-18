@@ -2,8 +2,12 @@
 
 set -euo pipefail
 
+git fetch origin merge-queue-state
+git checkout merge-queue-state
+
 for i in {1..10}; do
-  git fetch origin merge-queue-state --depth 1
+  git pull
+
   if git ls-tree --name-only origin/merge-queue-state lock | grep -q 'lock'; then
     echo "State is locked"
   else
@@ -14,14 +18,11 @@ for i in {1..10}; do
     git commit -m "Locking merge queue state"
 
     # this will fail if another runner has pushed a lock in the meantime
-    echo "Attempting to push the lock"
     if git push; then
-      echo "Succeeded"
       git checkout main
       exit 0
     else
-      echo "Failed to push, resetting"
-      git reset --hard HEAD~1
+      git reset --hard origin/merge-queue-state
     fi
   fi
 
