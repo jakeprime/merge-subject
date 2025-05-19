@@ -86,7 +86,7 @@ jobs:
           git push --set-upstream origin HEAD:$merge_branch
 
           sha=$(git rev-parse --short HEAD)
-          echo "merge_sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
           git log --oneline --decorate --graph
 
