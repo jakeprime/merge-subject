@@ -86,6 +86,7 @@ jobs:
           git push --set-upstream origin HEAD:$merge_branch
 
           sha=$(git rev-parse --short HEAD)
+          echo "merge_sha=$sha" >> "$GITHUB_OUTPUT"
 
           git log --oneline --decorate --graph
 
@@ -119,7 +120,59 @@ jobs:
       - name: Unlock merge queue state
         run: .github/scripts/unlock-merge-queue-state.sh
 
-        # - name: Wait for successful CI
+      - name: Wait for CircleCI to pass
+        id: wait_for_ci
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REPO=${{ github.repository }}
+          SHA=${{ steps.create_merge_branch.outputs.sha }}
+
+          for i in {1..60}; do
+
+            result=$(gh api repos/$REPO/commits/$SHA/status)
+
+            state=$(echo "$result" | jq -r '.state')
+
+            echo "Status state: $state"
+
+            if [ "$state" = "success" ]; then
+              echo "✅ All statuses passed"
+              exit 0
+            elif [ "$state" = "failure" ]; then
+              echo "❌ One or more statuses failed"
+              exit 1
+            fi
+
+            echo "Waiting for statuses..."
+            sleep 10
+          done
+
+          echo "⏰ Timed out waiting for commit status"
+          exit 1
+
+      - name: Wait until first in queue
+        run: |
+          merge_branch=${{ steps.load_state.outputs.merge_branch }}
+
+          for i in {1..12}; do
+            git fetch origin merge-queue-state --depth 1
+
+            first_branch=$(
+              git show origin/merge-queue-state:state.json |
+              jq '.mergeBranches | min_by(.count) | .name'
+            )
+
+            if [[ "$merge_branch" == "$first_branch" ]]; then
+              exit 0
+            fi
+
+            echo "Waiting for queue position"
+            sleep 5
+          done
+
+          echo "⏰ Timed out waiting for queue position"
+          exit 1
 
       - name: Lock merge queue state
         run: .github/scripts/lock-merge-queue-state.sh
@@ -132,26 +185,26 @@ jobs:
           merge_branch=${{ steps.load_state.outputs.merge_branch }}
           pr_branch=${{ steps.load_state.outputs.pr_branch }}
 
-          # git checkout $pr_branch
-          # git rebase --rebase-merges $base_branch
-          # git push --force-with-lease
-          # git checkout main
-          # git pull
-          # git reset --hard $merge_branch
-          # git push --force-with-lease
+          git fetch origin main $pr_branch
+          git checkout $pr_branch
+          git rebase main
+          git push --force-with-lease
 
-          # git push --delete origin $merge_branch
-          # git push --delete origin $pr_branch
+          git checkout main
+          git merge $pr_branch --no-ff
+          git push
 
-          # git checkout merge-queue-state
-          # git pull
-          # cat state.json
-          # jq \
-          #   --arg name "$merge_branch" \
-          #   '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
-          # git add state.json
-          # git commit -m '$merge_branch has been successfully merged'
-          # git push
+          git push --delete origin $merge_branch
+
+          git checkout merge-queue-state
+          git pull
+          cat state.json
+          jq \
+            --arg name "$merge_branch" \
+            '.mergeBranches |= map(select(.name != $name))' state.json > tmp && mv tmp state.json
+          git add state.json
+          git commit -m '$merge_branch has been successfully merged'
+          git push
 
           cat state.json
 
