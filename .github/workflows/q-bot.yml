@@ -5,6 +5,14 @@ on:
     types: [created, edited]
 
 jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say something
+        uses: ./.github/workflows/say-something.yml
+        with:
+          message: "relax"
+
   merge:
     name: Merge to main
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
@@ -12,6 +20,11 @@ jobs:
     permissions: write-all
 
     steps:
+      - name: Say something
+        uses: ./.github/workflows/say-something.yml
+        with:
+          message: "relax"
+
       - name: Acknowledge
         uses: actions/github-script@v7
         with:
@@ -191,6 +204,7 @@ jobs:
 
 
           git checkout main && git pull
+          # do a GH merge here instead of merging to main, sometimes we're ending up with a "Closed~" state.
           git merge $pr_branch --no-ff
           git push
 

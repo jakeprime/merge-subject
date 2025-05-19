@@ -1,0 +1,14 @@
+name: Frankie say
+on:
+  workflow_call:
+    inputs:
+      message:
+        required: true
+        type: string
+
+jobs:
+  do:
+    runs-on: ubuntu-latest
+    steps:
+      - id: set
+        run: echo "frankie say ${{ inputs.message }}" >> $GITHUB_OUTPUT
