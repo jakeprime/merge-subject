@@ -80,24 +80,14 @@ jobs:
           git checkout $base_branch && git pull
           git checkout -b $merge_branch
 
-          git log --oneline --decorate --graph
-
           git checkout $pr_branch && git pull
           git rebase $merge_branch
-
-
-          git log --oneline --decorate --graph
-
-          # git checkout $base_branch
-          # git checkout -b $merge_branch
 
           git merge --no-edit --no-ff $pr_branch
           git push --set-upstream origin HEAD:$merge_branch
 
           sha=$(git rev-parse --short HEAD)
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
-
-          git log --oneline --decorate --graph
 
           git checkout merge-queue-state
 
@@ -172,8 +162,6 @@ jobs:
               jq -r '.mergeBranches | min_by(.count) | .name'
             )
 
-            echo "comparing $merge_branch with $first_branch"
-
             if [[ "$merge_branch" == "$first_branch" ]]; then
               exit 0
             fi
@@ -199,14 +187,11 @@ jobs:
           git fetch origin main $pr_branch
           git checkout $pr_branch && git reset --hard origin/$pr_branch
           git rebase origin/main
-          echo "pushing pr branch"
           git push --force-with-lease origin HEAD:$pr_branch
 
 
           git checkout main && git pull
-          echo "merging main"
           git merge $pr_branch --no-ff
-          echo "pushing main"
           git push
 
           git push --delete origin $merge_branch
