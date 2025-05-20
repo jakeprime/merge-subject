@@ -1,0 +1,13 @@
+name: Merge-Queue
+run-name: Merge-Queue
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  merge:
+    name: Merge to main
+    secrets: inherit
+    uses: jakeprime/merge-queue/.github/workflows/merge-queue.yml@main
+    secrets:
+      MERGE_QUEUE_TOKEN: ${{ secrets.MERGE_QUEUE_TOKEN }}
