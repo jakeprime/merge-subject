@@ -6,8 +6,8 @@ on:
 
 jobs:
   merge:
-    name: Merge to main
-    secrets: inherit
+    if: github.event.issue.pull_request && github.event.comment.body == '/merge'
+    name: Merge
     uses: jakeprime/merge-queue/.github/workflows/merge-queue.yml@main
-    secrets:
-      MERGE_QUEUE_TOKEN: ${{ secrets.MERGE_QUEUE_TOKEN }}
+    permissions: write-all
+    secrets: inherit
