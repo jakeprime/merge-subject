@@ -5,4 +5,8 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     get "/up"
     assert_response 200
   end
+
+  test "this will fail" do
+    refute true
+  end
 end
