@@ -1,13 +1,22 @@
 name: Merge-Queue
 run-name: Merge-Queue
+
 on:
   issue_comment:
     types: [created, edited]
+  workflow_dispatch:
 
 jobs:
   merge:
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     name: Merge
+    uses: jakeprime/merge-queue/.github/workflows/merge-queue.yml@main
+    permissions: write-all
+    secrets: inherit
+
+  retry_merge:
+    if: github.event_name == 'workflow_dispatch'
+    name: Retry merge
     uses: jakeprime/merge-queue/.github/workflows/merge-queue.yml@main
     permissions: write-all
     secrets: inherit
