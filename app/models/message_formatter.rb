@@ -5,4 +5,8 @@ class MessageFormatter
     @message = message
     @style = style
   end
+
+  def shout
+    @message.upcase
+  end
 end

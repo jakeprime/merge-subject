@@ -10,4 +10,8 @@ class MessageFormatterTest < ActiveSupport::TestCase
   test "it initializes" do
     assert subject.is_a?(MessageFormatter)
   end
+
+  test "it shouts" do
+    assert_equal "HELLO, WORLD", subject.shout
+  end
 end
