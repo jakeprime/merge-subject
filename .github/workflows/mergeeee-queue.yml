@@ -9,6 +9,6 @@ jobs:
   merge:
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     name: Merge
-    uses: jakeprime/merge-queue/.github/workflows/merge-queue.yml@retry-failures
+    uses: jakeprime/merge-queue/.github/workflows/merge.yml@typescript
     permissions: write-all
     secrets: inherit
