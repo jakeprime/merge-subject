@@ -6,9 +6,30 @@ on:
     types: [created, edited]
 
 jobs:
+  acknowlege:
+    if: github.event.issue.pull_request && github.event.comment.body == '/merge'
+    name: Acknowledge
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Acknowledge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ github.event.comment.id }},
+              content: 'eyes'
+            });
+
   merge:
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     name: Merge
-    uses: jakeprime/merge-queue/.github/workflows/merge.yml@ruby
+    runs-on: ubuntu-latest
     permissions: write-all
-    secrets: inherit
+    steps:
+      - uses: jakeprime/merge-queue@ruby
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          PR_NUMBER: ${{ github.event.issue.number }}
