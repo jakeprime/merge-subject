@@ -9,6 +9,15 @@ jobs:
   merge:
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     name: Merge
-    uses: jakeprime/merge-queue/.github/workflows/merge.yml@ruby
-    permissions: write-all
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jakeprime/merge-queue@ruby
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        id: greet
+        with:
+          name: 'Jake'
+          loud: 'true'
+
+      - name: Print the timestamp
+        run: echo "Ran at ${{ steps.greet.outputs.timestamp }}"
