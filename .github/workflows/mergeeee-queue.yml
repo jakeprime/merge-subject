@@ -9,6 +9,8 @@ jobs:
   merge:
     if: github.event.issue.pull_request && github.event.comment.body == '/merge'
     name: Merge
-    uses: jakeprime/merge-queue/.github/workflows/merge.yml@ruby
-    permissions: write-all
-    secrets: inherit
+    steps:
+      - uses: jakeprime/merge-queue@ruby
+        with:
+          name: 'Jake'
+          loud: 'true'
