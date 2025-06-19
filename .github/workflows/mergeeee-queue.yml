@@ -31,5 +31,5 @@ jobs:
     steps:
       - uses: jakeprime/merge-queue@ruby
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.issue.number }}
