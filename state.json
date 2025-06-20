@@ -1,4 +1,14 @@
 {
-  "branchCounter": 13,
-  "mergeBranches": []
+  "branchCounter": 14,
+  "mergeBranches": [
+    {
+      "name": "merge-branch/dependabot/bundler/thruster-0.1.14-14",
+      "title": "Bump thruster from 0.1.13 to 0.1.14",
+      "pr_number": "212",
+      "sha": "934708d76aa03f0fc09456855c13b1558bf1ae54",
+      "count": 14,
+      "status": "pending",
+      "ancestors": []
+    }
+  ]
 }
