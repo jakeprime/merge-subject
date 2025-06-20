@@ -1,5 +1,5 @@
 {
-  "branchCounter": 7,
+  "branchCounter": 8,
   "mergeBranches": [
     {
       "name": "merge-branch/dependabot/bundler/debug-1.11.0-6",
