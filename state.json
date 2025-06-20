@@ -1,5 +1,5 @@
 {
-  "branchCounter": 14,
+  "branchCounter": 15,
   "mergeBranches": [
     {
       "name": "merge-branch/dependabot/bundler/thruster-0.1.14-14",
@@ -9,6 +9,17 @@
       "count": 14,
       "status": "pending",
       "ancestors": []
+    },
+    {
+      "name": "merge-branch/dependabot/bundler/selenium-webdriver-4.33.0-15",
+      "title": "Bump selenium-webdriver from 4.32.0 to 4.33.0",
+      "pr_number": "138",
+      "sha": "297113c8c616d6447dfa257ab20922a83432efce",
+      "count": 15,
+      "status": "pending",
+      "ancestors": [
+        "merge-branch/dependabot/bundler/thruster-0.1.14-14"
+      ]
     }
   ]
 }
