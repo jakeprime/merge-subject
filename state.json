@@ -1,4 +1,14 @@
 {
-  "branchCounter": 3,
-  "mergeBranches": []
+  "branchCounter": 4,
+  "mergeBranches": [
+    {
+      "name": "merge-branch/dependabot/bundler/kamal-2.7.0-4",
+      "title": "Bump kamal from 2.6.0 to 2.7.0",
+      "pr_number": "213",
+      "sha": "54a282c24989cb4d78e104d549afed5cd13cde87",
+      "count": 4,
+      "status": "pending",
+      "ancestors": []
+    }
+  ]
 }
