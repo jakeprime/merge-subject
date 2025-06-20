@@ -1,14 +1,4 @@
 {
   "branchCounter": 9,
-  "mergeBranches": [
-    {
-      "name": "merge-branch/dependabot/bundler/debug-1.11.0-6",
-      "title": "Bump debug from 1.10.0 to 1.11.0",
-      "pr_number": "211",
-      "sha": "265d335110641f499fc72f4966c37bba7f831bd1",
-      "count": 6,
-      "status": "pending",
-      "ancestors": []
-    }
-  ]
+  "mergeBranches": []
 }
