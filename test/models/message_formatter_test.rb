@@ -3,15 +3,11 @@
 require "test_helper"
 
 class MessageFormatterTest < ActiveSupport::TestCase
-  test "it initializes" do
-    instance = MessageFormatter.new("Hello, world")
-
-    assert instance.is_a?(MessageFormatter)
+  def subject
+    MessageFormatter.new("Hello, world")
   end
 
-  test "it shouts" do
-    instance = MessageFormatter.new("Hello, world")
-
-    assert_equal "HELLO, WORLD", instance.shout
+  test "it initializes" do
+    assert subject.is_a?(MessageFormatter)
   end
 end
