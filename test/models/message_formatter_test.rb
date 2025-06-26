@@ -4,7 +4,7 @@ require "test_helper"
 
 class MessageFormatterTest < ActiveSupport::TestCase
   def subject
-    MessageFormatter.new("Hello, world")
+    MessageFormatter.new("Hello, world", :cocoa)
   end
 
   test "it initializes" do
