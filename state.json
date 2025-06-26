@@ -18,7 +18,7 @@
       "pr_number": "218",
       "sha": "3371bae46a93265bbf48d7280d7343391fa40625",
       "count": 56,
-      "status": "pending",
+      "status": "success",
       "ancestors": [
         "merge-branch/jake-a19-55"
       ]
