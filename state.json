@@ -1,4 +1,15 @@
 {
-  "branchCounter": 78,
-  "mergeBranches": []
+  "branchCounter": 79,
+  "mergeBranches": [
+    {
+      "name": "merge-branch/dependabot/bundler/solid_cable-3.0.11-79",
+      "pr_branch": "dependabot/bundler/solid_cable-3.0.11",
+      "title": "Bump solid_cable from 3.0.8 to 3.0.11",
+      "pr_number": "218",
+      "sha": "3371bae46a93265bbf48d7280d7343391fa40625",
+      "count": 79,
+      "status": "pending",
+      "ancestors": []
+    }
+  ]
 }
