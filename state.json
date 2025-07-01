@@ -10,6 +10,18 @@
       "count": 81,
       "status": "pending",
       "ancestors": []
+    },
+    {
+      "name": "merge-branch/dependabot/bundler/selenium-webdriver-4.34.0-82",
+      "pr_branch": "dependabot/bundler/selenium-webdriver-4.34.0",
+      "title": "Bump selenium-webdriver from 4.33.0 to 4.34.0",
+      "pr_number": "224",
+      "sha": "4bb2fb15239bbde0262e63c8b1f58e787a27b46b",
+      "count": 82,
+      "status": "pending",
+      "ancestors": [
+        "merge-branch/dependabot/bundler/solid_cable-3.0.11-81"
+      ]
     }
   ]
 }
