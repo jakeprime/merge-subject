@@ -8,7 +8,7 @@
       "pr_number": "249",
       "sha": "5d3954834a76840e6101d695b27429890a62c8d6",
       "count": 16,
-      "status": "pending",
+      "status": "failure",
       "ancestors": []
     }
   ]
