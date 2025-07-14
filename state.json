@@ -8,22 +8,9 @@
       "pr_number": "249",
       "sha": "5d3954834a76840e6101d695b27429890a62c8d6",
       "count": 13,
-      "status": "pending",
+      "status": "failure",
       "ancestors": [
         "merge-branch/2025-07-14-02-17-12"
-      ]
-    },
-    {
-      "name": "merge-branch/2025-07-14-02-22-14",
-      "pr_branch": "2025-07-14-02-22",
-      "title": "Remote format file",
-      "pr_number": "250",
-      "sha": "55ae7061461140a1ca5ad64d3c8f6b4143c27a6f",
-      "count": 14,
-      "status": "pending",
-      "ancestors": [
-        "merge-branch/2025-07-14-02-17-12",
-        "merge-branch/2025-07-14-02-19-13"
       ]
     }
   ]
