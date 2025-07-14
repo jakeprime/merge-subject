@@ -1,15 +1,4 @@
 {
   "branchCounter": 16,
-  "mergeBranches": [
-    {
-      "name": "merge-branch/2025-07-14-02-19-16",
-      "pr_branch": "2025-07-14-02-19",
-      "title": "Add option to formatter",
-      "pr_number": "249",
-      "sha": "5d3954834a76840e6101d695b27429890a62c8d6",
-      "count": 16,
-      "status": "failure",
-      "ancestors": []
-    }
-  ]
+  "mergeBranches": []
 }
