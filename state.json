@@ -8,20 +8,8 @@
       "pr_number": "249",
       "sha": "5d3954834a76840e6101d695b27429890a62c8d6",
       "count": 25,
-      "status": "pending",
-      "ancestors": []
-    },
-    {
-      "name": "merge-branch/jake-158-26",
-      "pr_branch": "jake-158",
-      "title": "touch 158",
-      "pr_number": "251",
-      "sha": "982e5b5b52e61254e9c1e7ef24e3759f3e7a08a8",
-      "count": 26,
       "status": "failure",
-      "ancestors": [
-        "merge-branch/2025-07-14-02-19-25"
-      ]
+      "ancestors": []
     }
   ]
 }
