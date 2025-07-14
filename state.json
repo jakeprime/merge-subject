@@ -2,16 +2,6 @@
   "branchCounter": 13,
   "mergeBranches": [
     {
-      "name": "merge-branch/2025-07-14-02-17-12",
-      "pr_branch": "2025-07-14-02-17",
-      "title": "Add yell test",
-      "pr_number": "248",
-      "sha": "5f796dee68452403cc166bad7768cfae52dc79aa",
-      "count": 12,
-      "status": "success",
-      "ancestors": []
-    },
-    {
       "name": "merge-branch/2025-07-14-02-19-13",
       "pr_branch": "2025-07-14-02-19",
       "title": "Add option to formatter",
