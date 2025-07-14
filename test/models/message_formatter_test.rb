@@ -14,4 +14,10 @@ class MessageFormatterTest < ActiveSupport::TestCase
 
     assert_equal "HELLO, WORLD", instance.shout
   end
+
+  test "it yells" do
+    instance = MessageFormatter.new("Hello, world")
+
+    assert_equal "HELLO, WORLD", instance.shout
+  end
 end
