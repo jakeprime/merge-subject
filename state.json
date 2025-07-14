@@ -18,7 +18,7 @@
       "pr_number": "251",
       "sha": "982e5b5b52e61254e9c1e7ef24e3759f3e7a08a8",
       "count": 26,
-      "status": "pending",
+      "status": "failure",
       "ancestors": [
         "merge-branch/2025-07-14-02-19-25"
       ]
