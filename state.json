@@ -1,4 +1,15 @@
 {
-  "branchCounter": 27,
-  "mergeBranches": []
+  "branchCounter": 28,
+  "mergeBranches": [
+    {
+      "name": "merge-branch/dependabot/bundler/solid_queue-1.2.0-28",
+      "pr_branch": "dependabot/bundler/solid_queue-1.2.0",
+      "title": "Bump solid_queue from 1.1.5 to 1.2.0",
+      "pr_number": "234",
+      "sha": "0fc5ea46cde5995669191f8918540535335ad803",
+      "count": 28,
+      "status": "pending",
+      "ancestors": []
+    }
+  ]
 }
