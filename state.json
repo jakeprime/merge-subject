@@ -1,15 +1,4 @@
 {
   "branchCounter": 29,
-  "mergeBranches": [
-    {
-      "name": "merge-branch/dependabot/bundler/propshaft-1.2.0-29",
-      "pr_branch": "dependabot/bundler/propshaft-1.2.0",
-      "title": "Bump propshaft from 1.1.0 to 1.2.0",
-      "pr_number": "253",
-      "sha": "17f5de49230fd78d0bf2b092186bc726fc43e4f4",
-      "count": 29,
-      "status": "success",
-      "ancestors": []
-    }
-  ]
+  "mergeBranches": []
 }
