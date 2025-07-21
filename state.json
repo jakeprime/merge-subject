@@ -2,16 +2,6 @@
   "branchCounter": 39,
   "mergeBranches": [
     {
-      "name": "merge-branch/dependabot/bundler/sqlite3-2.7.3-38",
-      "pr_branch": "dependabot/bundler/sqlite3-2.7.3",
-      "title": "Bump sqlite3 from 2.7.2 to 2.7.3",
-      "pr_number": "258",
-      "sha": "960211d26bb20bf485ceb8bfbee0abca781d53d3",
-      "count": 38,
-      "status": "success",
-      "ancestors": []
-    },
-    {
       "name": "merge-branch/dependabot/bundler/brakeman-7.1.0-39",
       "pr_branch": "dependabot/bundler/brakeman-7.1.0",
       "title": "Bump brakeman from 7.0.2 to 7.1.0",
