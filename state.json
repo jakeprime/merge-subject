@@ -10,6 +10,18 @@
       "count": 38,
       "status": "success",
       "ancestors": []
+    },
+    {
+      "name": "merge-branch/dependabot/bundler/brakeman-7.1.0-39",
+      "pr_branch": "dependabot/bundler/brakeman-7.1.0",
+      "title": "Bump brakeman from 7.0.2 to 7.1.0",
+      "pr_number": "259",
+      "sha": "1b0d24cb2df40c73459b1811939f6673f1edd5c8",
+      "count": 39,
+      "status": "pending",
+      "ancestors": [
+        "merge-branch/dependabot/bundler/sqlite3-2.7.3-38"
+      ]
     }
   ]
 }
