@@ -1,4 +1,15 @@
 {
   "branchCounter": 38,
-  "mergeBranches": []
+  "mergeBranches": [
+    {
+      "name": "merge-branch/dependabot/bundler/sqlite3-2.7.3-38",
+      "pr_branch": "dependabot/bundler/sqlite3-2.7.3",
+      "title": "Bump sqlite3 from 2.7.2 to 2.7.3",
+      "pr_number": "258",
+      "sha": "960211d26bb20bf485ceb8bfbee0abca781d53d3",
+      "count": 38,
+      "status": "pending",
+      "ancestors": []
+    }
+  ]
 }
