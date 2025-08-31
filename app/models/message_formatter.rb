@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MessageFormatter
-  def initialize(message)
+  def initialize(message, option)
     @message = message
   end
 
